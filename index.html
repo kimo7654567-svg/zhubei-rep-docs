@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>竹北市民代表會 文件產生器</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #1c1c2e;
+  --seal:    #b83232;
+  --gold:    #9a7d3a;
+  --paper:   #faf7f2;
+  --paper2:  #f0ead8;
+  --border:  #d4c5a9;
+  --muted:   #7a6a55;
+  --green:   #2d6a4f;
+  --white:   #ffffff;
+  --radius:  10px;
+  --shadow:  0 2px 16px rgba(28,28,46,0.09);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--paper2);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+header {
+  background: var(--ink);
+  color: var(--white);
+  padding: 18px 28px;
+  display: flex; align-items: center; gap: 14px;
+  border-bottom: 3px solid var(--seal);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+}
+.seal-badge {
+  width: 44px; height: 44px; flex-shrink: 0;
+  border: 2px solid var(--seal); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 10px; font-weight: 700; color: var(--seal);
+  line-height: 1.3; text-align: center;
+}
+header h1 { font-family: 'Noto Serif TC', serif; font-size: 17px; font-weight: 700; letter-spacing: 0.04em; }
+header p  { font-size: 12px; color: #999; margin-top: 2px; }
+.btn-history {
+  margin-left: auto;
+  background: transparent; border: 1px solid rgba(255,255,255,0.25);
+  color: #ccc; padding: 7px 16px; border-radius: 20px;
+  font-size: 13px; cursor: pointer;
+  font-family: 'Noto Sans TC', sans-serif;
+  transition: all .2s; white-space: nowrap;
+}
+.btn-history:hover { border-color: #c8a84b; color: #c8a84b; }
+
+/* ── Layout ── */
+main { max-width: 740px; margin: 32px auto; padding: 0 18px 80px; }
+
+/* ── Mode Switch ── */
+.mode-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: var(--paper); border: 1.5px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); margin-bottom: 24px;
+}
+.mode-btn {
+  padding: 16px 10px; text-align: center;
+  border: none; background: transparent; cursor: pointer;
+  font-family: 'Noto Serif TC', serif; font-size: 15px; font-weight: 600;
+  color: var(--muted); transition: all .22s; letter-spacing: 0.04em;
+}
+.mode-btn small { display: block; font-size: 11px; color: #bbb; margin-top: 3px; font-family: 'Noto Sans TC', sans-serif; font-weight: 400; }
+.mode-btn.active { background: var(--ink); color: var(--white); }
+.mode-btn.active small { color: #aaa; }
+.mode-btn:not(.active):hover { background: var(--paper2); }
+
+/* ── Card ── */
+.card {
+  background: var(--paper); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 24px;
+  margin-bottom: 16px; box-shadow: var(--shadow);
+}
+.card-title {
+  font-family: 'Noto Serif TC', serif; font-size: 13px; font-weight: 700;
+  color: var(--muted); letter-spacing: 0.1em;
+  margin-bottom: 18px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title::before { content:''; display:inline-block; width:3px; height:14px; background:var(--seal); border-radius:2px; }
+
+/* ── Form ── */
+.form-row { margin-bottom: 16px; }
+label { display:block; font-size:13px; font-weight:500; color:var(--muted); margin-bottom:5px; }
+label .req { color:var(--seal); }
+
+input[type=text], input[type=date], input[type=number], select, textarea {
+  width: 100%; padding: 9px 13px;
+  border: 1.5px solid var(--border); border-radius: 6px;
+  background: var(--white); color: var(--ink);
+  font-family: 'Noto Sans TC', sans-serif; font-size: 14px;
+  outline: none; transition: border-color .2s, box-shadow .2s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(28,28,46,0.07);
+}
+textarea { resize: vertical; line-height: 1.7; }
+
+.session-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.session-row span { font-size:14px; white-space:nowrap; }
+.session-row input[type=number] { width:68px; text-align:center; }
+.session-row select { width:120px; }
+
+.date-row { display:flex; gap:8px; align-items:center; }
+.date-row input { flex:1; }
+.btn-today {
+  white-space:nowrap; background:transparent;
+  border:1.5px solid var(--border); padding:8px 13px;
+  border-radius:6px; font-size:12px; cursor:pointer;
+  color:var(--muted); font-family:'Noto Sans TC',sans-serif;
+  transition:all .2s;
+}
+.btn-today:hover { border-color:var(--ink); color:var(--ink); }
+
+.hint { font-size:11px; color:#aaa; margin-top:4px; }
+
+/* ── Draft + AI btn ── */
+.draft-wrap { position:relative; }
+.draft-wrap textarea { padding-bottom: 44px; }
+.btn-ai {
+  position:absolute; right:10px; bottom:10px;
+  background:var(--ink); color:var(--white);
+  border:none; padding:7px 15px; border-radius:6px;
+  font-size:12px; cursor:pointer;
+  font-family:'Noto Sans TC',sans-serif;
+  display:flex; align-items:center; gap:5px;
+  transition:background .2s, transform .1s;
+}
+.btn-ai:hover { background:#2d2d4e; }
+.btn-ai:active { transform:scale(.97); }
+.btn-ai.loading { opacity:.65; pointer-events:none; }
+.spin { display:inline-block; animation:spin 1s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── AI Result ── */
+.ai-result {
+  background:#f0f7f4; border:1.5px solid #a8d5c2;
+  border-radius:8px; padding:16px; margin-top:12px; display:none;
+}
+.ai-result.show { display:block; }
+.ai-result-hd {
+  font-size:11px; font-weight:700; color:var(--green);
+  letter-spacing:.07em; margin-bottom:12px;
+}
+.ai-field { margin-bottom:12px; }
+.ai-field:last-of-type { margin-bottom:0; }
+.ai-field-name { font-size:12px; font-weight:700; color:var(--muted); margin-bottom:4px; }
+.ai-field-text {
+  font-family:'Noto Serif TC',serif; font-size:14px; line-height:1.8;
+  background:white; border:1px solid #c0e0d0; border-radius:6px;
+  padding:9px 12px; cursor:pointer; transition:border-color .2s;
+}
+.ai-field-text:hover { border-color:var(--green); }
+.ai-field-edit { display:none; width:100%; margin-top:6px; }
+.ai-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.btn-use {
+  background:var(--green); color:white; border:none;
+  padding:8px 18px; border-radius:6px; font-size:13px;
+  cursor:pointer; font-family:'Noto Sans TC',sans-serif; transition:background .2s;
+}
+.btn-use:hover { background:#1e4d38; }
+.btn-regen {
+  background:transparent; color:var(--muted);
+  border:1.5px solid var(--border);
+  padding:8px 18px; border-radius:6px; font-size:13px;
+  cursor:pointer; font-family:'Noto Sans TC',sans-serif; transition:all .2s;
+}
+.btn-regen:hover { border-color:var(--ink); color:var(--ink); }
+
+/* ── Image Upload ── */
+.img-toggle-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.toggle { width:42px; height:23px; background:#ccc; border-radius:12px; position:relative; cursor:pointer; transition:background .2s; flex-shrink:0; }
+.toggle.on { background:var(--ink); }
+.toggle::after { content:''; width:17px; height:17px; background:white; border-radius:50%; position:absolute; top:3px; left:3px; transition:left .2s; }
+.toggle.on::after { left:22px; }
+.toggle-lbl { font-size:14px; cursor:pointer; }
+
+.upload-area {
+  border:2px dashed var(--border); border-radius:8px;
+  padding:22px; text-align:center; cursor:pointer;
+  background:white; transition:all .2s; display:none;
+}
+.upload-area.visible { display:block; }
+.upload-area:hover, .upload-area.drag { border-color:var(--ink); background:var(--paper2); }
+.upload-area p { font-size:13px; color:var(--muted); margin-top:6px; }
+.upload-area span { color:var(--ink); font-weight:500; text-decoration:underline; }
+#imgInput { display:none; }
+#imgPreview { max-width:100%; max-height:200px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,.12); margin-top:10px; display:none; }
+#imgRemove { font-size:12px; color:var(--seal); cursor:pointer; margin-top:5px; display:none; text-decoration:underline; }
+
+/* ── Generate Btn ── */
+.btn-gen {
+  width:100%; background:var(--ink); color:white; border:none;
+  padding:15px; border-radius:var(--radius);
+  font-family:'Noto Serif TC',serif; font-size:16px; font-weight:700;
+  letter-spacing:.07em; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:9px;
+  transition:all .22s; margin-top:4px;
+}
+.btn-gen:hover { background:#2d2d4e; transform:translateY(-1px); box-shadow:0 6px 18px rgba(28,28,46,.2); }
+.btn-gen:active { transform:translateY(0); }
+.btn-gen.loading { opacity:.65; pointer-events:none; }
+
+/* ── Result ── */
+.result-box {
+  background:linear-gradient(135deg, #1c1c2e, #2d2d4e);
+  border-radius:var(--radius); padding:28px; text-align:center;
+  color:white; margin-top:18px; display:none; box-shadow:var(--shadow);
+}
+.result-box.show { display:block; }
+.result-box h3 { font-family:'Noto Serif TC',serif; font-size:18px; font-weight:700; margin-bottom:8px; }
+.result-box p { font-size:13px; color:#aaa; margin-bottom:18px; }
+.btn-open {
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--seal); color:white; text-decoration:none;
+  padding:11px 26px; border-radius:8px;
+  font-family:'Noto Serif TC',serif; font-size:15px; font-weight:700;
+  transition:all .2s;
+}
+.btn-open:hover { background:#9a2424; transform:translateY(-1px); }
+
+/* ── History Sidebar ── */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:200; display:none; backdrop-filter:blur(2px); }
+.overlay.show { display:block; }
+.sidebar {
+  position:fixed; right:0; top:0; bottom:0; width:370px; max-width:95vw;
+  background:var(--paper); border-left:1.5px solid var(--border);
+  box-shadow:-4px 0 24px rgba(0,0,0,.15); z-index:201;
+  display:flex; flex-direction:column;
+  transform:translateX(100%); transition:transform .28s ease;
+}
+.sidebar.show { transform:translateX(0); }
+.sidebar-hd {
+  padding:18px 22px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.sidebar-hd h2 { font-family:'Noto Serif TC',serif; font-size:16px; font-weight:700; }
+.btn-close { background:none; border:none; cursor:pointer; font-size:20px; color:var(--muted); padding:2px; }
+.sidebar-body { padding:14px 20px; overflow-y:auto; flex:1; }
+
+.h-item {
+  padding:13px; border:1px solid var(--border); border-radius:8px;
+  margin-bottom:10px; background:white; transition:border-color .2s;
+}
+.h-item:hover { border-color:var(--ink); }
+.h-badge {
+  display:inline-block; font-size:11px; font-weight:700;
+  padding:2px 9px; border-radius:10px; margin-bottom:6px; letter-spacing:.04em;
+}
+.h-badge.p { background:#e8e8f0; color:var(--ink); }
+.h-badge.a { background:#fde8e8; color:var(--seal); }
+.h-title { font-size:14px; font-weight:500; line-height:1.5; margin-bottom:3px; }
+.h-meta  { font-size:12px; color:var(--muted); }
+.h-link  { display:inline-flex; align-items:center; gap:4px; font-size:12px; color:var(--green); text-decoration:none; margin-top:6px; font-weight:500; }
+.h-link:hover { text-decoration:underline; }
+.empty { text-align:center; color:var(--muted); padding:40px 0; font-size:14px; }
+
+@media(max-width:580px){
+  header { padding:13px 14px; }
+  header h1 { font-size:14px; }
+  main { margin:18px auto; }
+  .card { padding:18px 14px; }
+  .sidebar { width:100%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="seal-badge">竹北<br>代表</div>
+  <div>
+    <h1>竹北市民代表會 文件產生器</h1>
+    <p>提案表 · 申請書 ─ AI 協助撰寫，直接存入 Google Drive</p>
+  </div>
+  <button class="btn-history" onclick="openHistory()">📋 歷史紀錄</button>
+</header>
+
+<main>
+
+  <!-- 模式切換 -->
+  <div class="mode-wrap">
+    <button class="mode-btn active" id="mProposal" onclick="setMode('proposal')">
+      臨時會 ／ 定時會　提案表
+      <small>新竹縣竹北市民代表會</small>
+    </button>
+    <button class="mode-btn" id="mApplication" onclick="setMode('application')">
+      申　請　書
+      <small>受文者：竹北市公所</small>
+    </button>
+  </div>
+
+  <!-- ══ 提案表面板 ══ -->
+  <div id="panelProposal">
+
+    <div class="card">
+      <div class="card-title">會議資訊</div>
+      <div class="form-row">
+        <label>會議場次 <span class="req">*</span></label>
+        <div class="session-row">
+          <span>第</span>
+          <input type="number" id="session" min="1" max="99" value="10">
+          <span>屆　第</span>
+          <input type="number" id="sessionNum" min="1" max="99" value="11">
+          <span>次</span>
+          <select id="sessionType">
+            <option>臨時會</option>
+            <option>定時會</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">草稿輸入 → AI 改寫</div>
+      <div class="form-row">
+        <label>用白話描述你的訴求 <span class="req">*</span></label>
+        <div class="draft-wrap">
+          <textarea id="pDraft" rows="5" placeholder="例如：竹北市場和停車場廁所氣味很差，建議除清潔外放擴香瓶或自動噴霧改善…"></textarea>
+          <button class="btn-ai" id="btnAiP" onclick="doRewrite('proposal')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            AI 改寫
+          </button>
+        </div>
+      </div>
+
+      <div class="ai-result" id="aiProposal">
+        <div class="ai-result-hd">✦ AI 改寫結果　點擊文字可直接編輯</div>
+        <div class="ai-field">
+          <div class="ai-field-name">案由</div>
+          <div class="ai-field-text" id="p案由text" onclick="editAI('p案由')"></div>
+          <textarea class="ai-field-edit" id="p案由edit" rows="2" onblur="saveAI('p案由','proposal','案由')"></textarea>
+        </div>
+        <div class="ai-field">
+          <div class="ai-field-name">說明</div>
+          <div class="ai-field-text" id="p說明text" onclick="editAI('p說明')"></div>
+          <textarea class="ai-field-edit" id="p說明edit" rows="4" onblur="saveAI('p說明','proposal','說明')"></textarea>
+        </div>
+        <div class="ai-actions">
+          <button class="btn-use" onclick="applyProposal()">✓ 套用至下方</button>
+          <button class="btn-regen" onclick="doRewrite('proposal')">↻ 重新生成</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">確認 / 修改內容</div>
+      <div class="form-row">
+        <label>案由 <span class="req">*</span></label>
+        <textarea id="pCaseText" rows="3" placeholder="套用 AI 結果，或直接輸入"></textarea>
+      </div>
+      <div class="form-row">
+        <label>說明 <span class="req">*</span></label>
+        <textarea id="pDesc" rows="5" placeholder="套用 AI 結果，或直接輸入"></textarea>
+      </div>
+      <div class="form-row">
+        <label>文件日期</label>
+        <div class="date-row">
+          <input type="date" id="pDate">
+          <button class="btn-today" onclick="setToday('pDate')">今天</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-gen" id="btnGenP" onclick="generate('proposal')">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      生成 Google Doc 提案表
+    </button>
+
+  </div><!-- /proposal -->
+
+  <!-- ══ 申請書面板 ══ -->
+  <div id="panelApplication" style="display:none">
+
+    <div class="card">
+      <div class="card-title">草稿輸入 → AI 改寫</div>
+      <div class="form-row">
+        <label>用白話描述申請內容 <span class="req">*</span></label>
+        <div class="draft-wrap">
+          <textarea id="aDraft" rows="5" placeholder="例如：站前之星社區（中山路605號）門口兩側機車亂停影響市容，希望能畫設停車格…"></textarea>
+          <button class="btn-ai" id="btnAiA" onclick="doRewrite('application')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            AI 改寫
+          </button>
+        </div>
+      </div>
+
+      <div class="ai-result" id="aiApplication">
+        <div class="ai-result-hd">✦ AI 改寫結果　點擊文字可直接編輯</div>
+        <div class="ai-field">
+          <div class="ai-field-name">主旨</div>
+          <div class="ai-field-text" id="a主旨text" onclick="editAI('a主旨')"></div>
+          <textarea class="ai-field-edit" id="a主旨edit" rows="2" onblur="saveAI('a主旨','application','主旨')"></textarea>
+        </div>
+        <div class="ai-field">
+          <div class="ai-field-name">說明</div>
+          <div class="ai-field-text" id="a說明text" onclick="editAI('a說明')"></div>
+          <textarea class="ai-field-edit" id="a說明edit" rows="4" onblur="saveAI('a說明','application','說明')"></textarea>
+        </div>
+        <div class="ai-actions">
+          <button class="btn-use" onclick="applyApplication()">✓ 套用至下方</button>
+          <button class="btn-regen" onclick="doRewrite('application')">↻ 重新生成</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">確認 / 修改內容</div>
+      <div class="form-row">
+        <label>受文者</label>
+        <input type="text" id="aRecipient" value="竹北市公所">
+      </div>
+      <div class="form-row">
+        <label>主旨 <span class="req">*</span></label>
+        <textarea id="aSubject" rows="3" placeholder="套用 AI 結果，或直接輸入"></textarea>
+      </div>
+      <div class="form-row">
+        <label>說明 <span class="req">*</span></label>
+        <textarea id="aDesc" rows="5" placeholder="套用 AI 結果，或直接輸入"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">附件圖片（選填）</div>
+      <div class="img-toggle-row">
+        <div class="toggle" id="imgToggle" onclick="toggleImg()"></div>
+        <span class="toggle-lbl" onclick="toggleImg()">附上圖片</span>
+      </div>
+      <div class="upload-area" id="uploadArea"
+           onclick="document.getElementById('imgInput').click()"
+           ondragover="onDragOver(event)" ondrop="onDrop(event)">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <p>拖放圖片至此，或 <span>點擊選擇</span></p>
+        <p class="hint">JPG / PNG，建議小於 5MB</p>
+      </div>
+      <input type="file" id="imgInput" accept="image/*" onchange="onFileSelect(event)">
+      <img id="imgPreview">
+      <div id="imgRemove" onclick="removeImg()">✕ 移除圖片</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">日期</div>
+      <div class="form-row">
+        <div class="date-row">
+          <input type="date" id="aDate">
+          <button class="btn-today" onclick="setToday('aDate')">今天</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-gen" id="btnGenA" onclick="generate('application')">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      生成 Google Doc 申請書
+    </button>
+
+  </div><!-- /application -->
+
+  <!-- 生成結果 -->
+  <div class="result-box" id="resultBox">
+    <div style="font-size:32px;margin-bottom:10px">✅</div>
+    <h3>文件已建立完成！</h3>
+    <p id="resultDesc"></p>
+    <a href="#" id="resultLink" target="_blank" class="btn-open">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      開啟 Google Doc
+    </a>
+  </div>
+
+</main>
+
+<!-- 歷史側板 -->
+<div class="overlay" id="overlay" onclick="closeHistory()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-hd">
+    <h2>📋 歷史紀錄</h2>
+    <button class="btn-close" onclick="closeHistory()">✕</button>
+  </div>
+  <div class="sidebar-body" id="historyBody">
+    <div class="empty">載入中…</div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// ★ 請將下方網址換成你的 GAS 部署網址
+// ═══════════════════════════════════════════════
+const GAS_URL = 'https://script.google.com/macros/s/請換成你的網址/exec';
+
+// ── State ──
+let mode = 'proposal';
+let imgB64 = null, imgMime = null, imgOn = false;
+let aiCache = { proposal: {}, application: {} };
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', () => {
+  setToday('pDate');
+  setToday('aDate');
+});
+
+// ── Mode ──
+function setMode(m) {
+  mode = m;
+  document.getElementById('panelProposal').style.display    = m === 'proposal'    ? '' : 'none';
+  document.getElementById('panelApplication').style.display = m === 'application' ? '' : 'none';
+  document.getElementById('mProposal').classList.toggle('active',    m === 'proposal');
+  document.getElementById('mApplication').classList.toggle('active', m === 'application');
+  document.getElementById('resultBox').classList.remove('show');
+}
+
+// ── Date ──
+function setToday(id) {
+  const d = new Date();
+  document.getElementById(id).value =
+    `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ── AI Rewrite ──
+async function doRewrite(type) {
+  const draftId = type === 'proposal' ? 'pDraft' : 'aDraft';
+  const raw = document.getElementById(draftId).value.trim();
+  if (!raw) { alert('請先輸入草稿內容'); return; }
+
+  const btn = document.getElementById(type === 'proposal' ? 'btnAiP' : 'btnAiA');
+  btn.classList.add('loading');
+  btn.innerHTML = `<span class="spin">⟳</span> 改寫中…`;
+
+  try {
+    const res  = await fetch(GAS_URL, { method:'POST', body: JSON.stringify({ action:'rewrite', docType:type, rawText:raw }) });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+
+    aiCache[type] = json.data;
+    const isP = type === 'proposal';
+    const prefix = isP ? 'p' : 'a';
+    const f1 = isP ? '案由' : '主旨';
+    const f2 = '說明';
+
+    document.getElementById(`${prefix}${f1}text`).textContent = json.data[f1] || '';
+    document.getElementById(`${prefix}${f2}text`).textContent = json.data[f2] || '';
+    document.getElementById(isP ? 'aiProposal' : 'aiApplication').classList.add('show');
+  } catch(e) {
+    alert('AI 改寫失敗：' + e.message);
+  } finally {
+    btn.classList.remove('loading');
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> AI 改寫`;
+  }
+}
+
+function editAI(id) {
+  const t = document.getElementById(id+'text');
+  const e = document.getElementById(id+'edit');
+  e.value = t.textContent;
+  t.style.display = 'none';
+  e.style.display = 'block';
+  e.focus();
+}
+function saveAI(id, type, field) {
+  const t = document.getElementById(id+'text');
+  const e = document.getElementById(id+'edit');
+  t.textContent = e.value;
+  t.style.display = '';
+  e.style.display = 'none';
+  aiCache[type][field] = e.value;
+}
+
+function applyProposal() {
+  document.getElementById('pCaseText').value = aiCache.proposal['案由'] || '';
+  document.getElementById('pDesc').value     = aiCache.proposal['說明'] || '';
+  document.getElementById('pCaseText').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+function applyApplication() {
+  document.getElementById('aSubject').value = aiCache.application['主旨'] || '';
+  document.getElementById('aDesc').value    = aiCache.application['說明'] || '';
+  document.getElementById('aSubject').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+// ── Image ──
+function toggleImg() {
+  imgOn = !imgOn;
+  document.getElementById('imgToggle').classList.toggle('on', imgOn);
+  document.getElementById('uploadArea').classList.toggle('visible', imgOn);
+  if (!imgOn) removeImg();
+}
+function onDragOver(e) { e.preventDefault(); document.getElementById('uploadArea').classList.add('drag'); }
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadArea').classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) loadImg(f);
+}
+function onFileSelect(e) { if (e.target.files[0]) loadImg(e.target.files[0]); }
+function loadImg(file) {
+  imgMime = file.type;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    imgB64 = ev.target.result.split(',')[1];
+    document.getElementById('imgPreview').src = ev.target.result;
+    document.getElementById('imgPreview').style.display = 'block';
+    document.getElementById('imgRemove').style.display = 'block';
+    document.getElementById('uploadArea').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+function removeImg() {
+  imgB64 = null; imgMime = null;
+  document.getElementById('imgPreview').style.display = 'none';
+  document.getElementById('imgRemove').style.display = 'none';
+  document.getElementById('imgInput').value = '';
+  if (imgOn) document.getElementById('uploadArea').style.display = 'block';
+}
+
+// ── Generate ──
+async function generate(type) {
+  let formData;
+  if (type === 'proposal') {
+    const 案由 = document.getElementById('pCaseText').value.trim();
+    const 說明 = document.getElementById('pDesc').value.trim();
+    const session     = document.getElementById('session').value;
+    const sessionNum  = document.getElementById('sessionNum').value;
+    const sessionType = document.getElementById('sessionType').value;
+    const date        = document.getElementById('pDate').value;
+    if (!案由 || !說明)      { alert('請填寫案由與說明'); return; }
+    if (!session || !sessionNum) { alert('請填寫屆次'); return; }
+    formData = { session, sessionNum, sessionType, 案由, 說明, date };
+  } else {
+    const 受文者 = document.getElementById('aRecipient').value.trim();
+    const 主旨   = document.getElementById('aSubject').value.trim();
+    const 說明   = document.getElementById('aDesc').value.trim();
+    const date   = document.getElementById('aDate').value;
+    if (!主旨 || !說明) { alert('請填寫主旨與說明'); return; }
+    formData = { 受文者, 主旨, 說明, date };
+  }
+
+  const btnId = type === 'proposal' ? 'btnGenP' : 'btnGenA';
+  const btn   = document.getElementById(btnId);
+  btn.classList.add('loading');
+  btn.innerHTML = `<span class="spin">⟳</span> 建立中，請稍候…`;
+
+  try {
+    const payload = {
+      action: 'createDoc', docType: type, formData,
+      imageBase64:  (type === 'application' && imgOn) ? imgB64  : null,
+      imageMimeType:(type === 'application' && imgOn) ? imgMime : null
+    };
+    const res  = await fetch(GAS_URL, { method:'POST', body: JSON.stringify(payload) });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+
+    document.getElementById('resultLink').href = json.docUrl;
+    document.getElementById('resultDesc').textContent = type === 'proposal'
+      ? `已存入「第${formData.session}屆 / 第${formData.sessionNum}次${formData.sessionType}」資料夾`
+      : '已存入「申請書」資料夾';
+    document.getElementById('resultBox').classList.add('show');
+    document.getElementById('resultBox').scrollIntoView({ behavior:'smooth' });
+  } catch(e) {
+    alert('文件建立失敗：' + e.message);
+  } finally {
+    btn.classList.remove('loading');
+    btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 生成 Google Doc ${type === 'proposal' ? '提案表' : '申請書'}`;
+  }
+}
+
+// ── History ──
+async function openHistory() {
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('sidebar').classList.add('show');
+  document.getElementById('historyBody').innerHTML = '<div class="empty">載入中…</div>';
+  try {
+    const res  = await fetch(GAS_URL + '?action=getHistory');
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+    const rows = json.rows || [];
+    if (!rows.length) {
+      document.getElementById('historyBody').innerHTML = '<div class="empty">尚無歷史紀錄</div>';
+      return;
+    }
+    document.getElementById('historyBody').innerHTML = rows.map(r => {
+      const isP = r.title.includes('屆') || r.title.includes('次');
+      return `<div class="h-item">
+        <div class="h-badge ${isP ? 'p' : 'a'}">${isP ? '提案' : '申請書'}</div>
+        <div class="h-title">${r.title}</div>
+        <div class="h-meta">${r.time}</div>
+        <a class="h-link" href="${r.url}" target="_blank">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          開啟文件
+        </a>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('historyBody').innerHTML = `<div class="empty">載入失敗：${e.message}</div>`;
+  }
+}
+function closeHistory() {
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('sidebar').classList.remove('show');
+}
+</script>
+</body>
+</html>
